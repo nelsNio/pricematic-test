@@ -1,5 +1,5 @@
 from typing import List
-
+import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
@@ -45,10 +45,13 @@ def put_product(product_id: int,product: schemas.ProductCreate, db:Session = Dep
 
 @app.delete("/products/{product_id}")
 def delete_product(product_id: int, db:Session = Depends(get_db)):
-    
-    crud.delete_product(db,product_id=product_id)
 
-    return {"ok":'Product Deleted'}
+    db_product = crud.get_product(db, product_id=product_id)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    else:
+        crud.delete_product(db,product_id=product_id)
+        return {"ok":'Product Deleted'}
      
 
 
@@ -56,3 +59,4 @@ def delete_product(product_id: int, db:Session = Depends(get_db)):
 def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     products = crud.get_products(db, skip=skip, limit=limit)
     return products
+

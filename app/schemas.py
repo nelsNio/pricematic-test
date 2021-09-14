@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class ProductBase(BaseModel):
     nombre: str 
     precio:int
-    fecha_insercion:date
+    fecha_insercion:date=datetime.now()
 
 
 

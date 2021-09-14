@@ -6,16 +6,17 @@ from .models import Product
 
 from . import models, schemas
 
-"""
-
-db
-product_id
-"""
 def get_product(db: Session, product_id: int):
     return db.query(models.Product).filter(models.Product.id == product_id).first()
 
 
 def put_product(db: Session, product_id: int,  product: schemas.ProductCreate):
+
+    """
+
+    db
+    product_id
+    """
     product_upd=product.dict()
     db_product =db.query(models.Product).filter(models.Product.id == product_id).first()
     db.query(models.Product).filter(models.Product.id == product_id).update(product_upd,'fetch')
